@@ -1,0 +1,5 @@
+# Block direct browser access to sensitive files
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>

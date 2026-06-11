@@ -6,8 +6,9 @@
 // Load .env file if present (from one level above web root, or same dir as fallback)
 (function () {
     $locations = [
-        dirname($_SERVER['DOCUMENT_ROOT'] ?? '') . '/.env',
-        __DIR__ . '/../../.env',
+        dirname($_SERVER['DOCUMENT_ROOT'] ?? '') . '/.env', // above public_html (preferred)
+        __DIR__ . '/../../.env',                            // above public_html (alt)
+        __DIR__ . '/../.env',                               // inside public_html (fallback)
     ];
     foreach ($locations as $path) {
         if (!is_readable($path)) continue;
