@@ -3,6 +3,24 @@
 // Portal Config
 // =====================================
 
+// Load .env file if present (from one level above web root, or same dir as fallback)
+(function () {
+    $locations = [
+        dirname($_SERVER['DOCUMENT_ROOT'] ?? '') . '/.env',
+        __DIR__ . '/../../.env',
+    ];
+    foreach ($locations as $path) {
+        if (!is_readable($path)) continue;
+        foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            if ($line[0] === '#' || !str_contains($line, '=')) continue;
+            [$key, $val] = explode('=', $line, 2);
+            $key = trim($key); $val = trim($val);
+            if ($key && getenv($key) === false) putenv("$key=$val");
+        }
+        break;
+    }
+})();
+
 // App environment
 define('APP_ENV', getenv('APP_ENV') ?: 'local');
 define('IS_PRODUCTION', APP_ENV === 'production');
